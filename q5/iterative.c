@@ -1,34 +1,38 @@
 /* FIXME: Implement! */
-#define NULL 0
+#include<stdio.h>
 
-typedef struct ListNode
-{
+typedef struct ListNode {
     struct ListNode *pNext;
-}ListNode;
+} ListNode;
 
 int main()
 {
     return 0;
 }
+/*
+ *  find the node which is the cycle begins
+ *  parameters   :  head of linked list
+ *  return value :  the node which is the cycle begins
+ *                  if there is no cycle,return NULL
+ */
 
 ListNode *detectCycle(ListNode *head)
 {
-    if(head == NULL || head->pNext == NULL)
-    {
+    if(head == NULL || head->pNext == NULL) {
         return NULL;
     }
     ListNode *slow=head;
     ListNode *fast=head;
-    unsigned int count=0;
-    while(fast->pNext!=NULL && fast->pNext->pNext!=NULL)
-    {
+    /*
+     * Two traversals with different speed will meet at the same node if there is a cycle.
+     * We can find the node which is the cycle begins.
+     */
+    while(fast->pNext!=NULL && fast->pNext->pNext!=NULL) {
         fast=fast->pNext->pNext;
         slow=slow->pNext;
-        if(fast == slow)
-        {
+        if(fast == slow) {
             slow = head;
-            while(slow != fast)
-            {
+            while(slow != fast) {
                 fast = fast->pNext;
                 slow = slow->pNext;
             }
