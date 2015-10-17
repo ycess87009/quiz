@@ -2,22 +2,9 @@
 #include<stdio.h>
 #include <stdlib.h>
 #include<string.h>
-#include <time.h>
+#include "time_routine.h"
 
 char smallest_character(char str[],char c);
-
-static double diff_in_second(struct timespec t1, struct timespec t2)
-{
-    struct timespec diff;
-    if (t2.tv_nsec-t1.tv_nsec < 0) {
-        diff.tv_sec  = t2.tv_sec - t1.tv_sec - 1;
-        diff.tv_nsec = t2.tv_nsec - t1.tv_nsec + 1000000000;
-    } else {
-        diff.tv_sec  = t2.tv_sec - t1.tv_sec;
-        diff.tv_nsec = t2.tv_nsec - t1.tv_nsec;
-    }
-    return (diff.tv_sec + diff.tv_nsec / 1000000000.0);
-}
 
 int main(int argc,char *argv[])
 {
@@ -27,7 +14,7 @@ int main(int argc,char *argv[])
         return 0;
     }
     struct timespec start, end;
-    double cpu_time1, cpu_time2;
+    double cpu_time1;
     char test_str[]="abcdefghijklmnopqrstuvwxyz";
     unsigned int count=0;
     int check=1;
