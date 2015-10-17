@@ -29,18 +29,24 @@ int main(int argc,char *argv[])
     struct timespec start, end;
     double cpu_time1, cpu_time2;
     char test_str[]="abcdefghijklmnopqrstuvwxyz";
+    int check=1;
     unsigned int count=0;
     printf("input character count:%d\n",strlen(argv[1]));
     clock_gettime(CLOCK_REALTIME, &start);
     for(; count<strlen(argv[1]); count++) {
         char result=smallest_character(test_str,(char )argv[1][count]);
         if(result==((int)argv[1][count]+1) ||((argv[1][count])=='z' && result=='a'))
-            printf("Correct!\n");
+            ;
         else
-            printf("Wrong!\n");
+            check=0;
     }
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time1 = diff_in_second(start, end);
+    if(check)
+        printf("Correct\n");
+    else
+        printf("Wrong\n");
+
     printf("Time: %lf sec.\n",cpu_time1);
     return 0;
 }
