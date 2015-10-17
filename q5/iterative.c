@@ -1,12 +1,65 @@
 /* FIXME: Implement! */
 #include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
 
 typedef struct ListNode {
     struct ListNode *pNext;
 } ListNode;
 
+ListNode *detectCycle(ListNode *head);
+
+static double diff_in_second(struct timespec t1, struct timespec t2)
+{
+    struct timespec diff;
+    if (t2.tv_nsec-t1.tv_nsec < 0) {
+        diff.tv_sec  = t2.tv_sec - t1.tv_sec - 1;
+        diff.tv_nsec = t2.tv_nsec - t1.tv_nsec + 1000000000;
+    } else {
+        diff.tv_sec  = t2.tv_sec - t1.tv_sec;
+        diff.tv_nsec = t2.tv_nsec - t1.tv_nsec;
+    }
+    return (diff.tv_sec + diff.tv_nsec / 1000000000.0);
+}
+
 int main()
 {
+
+    //setup Random number seed
+    srand((unsigned)time(NULL));
+    unsigned int nodes=1+rand()%200;
+    int loop=rand()%2;//determine if there is a cycle in list.
+    struct timespec start, end;
+    double cpu_time;
+    //generate linked list
+    int count=1,cycle_begin=-1;
+    if(loop)
+        cycle_begin=rand()%(nodes);
+    ListNode *head=malloc(sizeof(ListNode));
+    ListNode *e=head;
+    ListNode *record;
+    for(; count<nodes; count++) {
+        e->pNext=malloc(sizeof(ListNode));
+        if(count==cycle_begin) {
+            record=e;
+        }
+        e=e->pNext;
+    }
+    if(loop)
+        e->pNext=record;
+    else
+        e->pNext=NULL;
+
+    clock_gettime(CLOCK_REALTIME, &start);
+    ListNode *result=detectCycle(head);
+    clock_gettime(CLOCK_REALTIME, &end);
+    cpu_time = diff_in_second(start, end);
+    //Cycle exist->check result==record ,no Cycle->result should be NULL.
+    if((loop==1 && (result==record))|| (loop==0 && result==NULL))
+        printf("Correct! Time: %lf sec.\n",cpu_time);
+    else
+        printf("Wrong\n");
+
     return 0;
 }
 /*
